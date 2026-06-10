@@ -6,4 +6,11 @@ Es una plataforma para jugar online y competir por la mayor cantidad de puntos.
 
 Basado en /spec y /spec-impl
 
-## Hola mundo
+## Commands
+
+```bash
+npm run dev       # start dev server (Turbopack, default)
+npm run build     # production build (does NOT lint — run lint separately)
+npm run start     # start production server
+npm run lint      # ESLint via eslint CLI (not next lint)
+```

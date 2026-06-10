@@ -8,14 +8,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Arcade Vault — an online gaming platform where users play and compete for high scores. Uses Spec Driven Design: features are designed via `/spec` before implementation with `/spec-impl`.
 
-## Commands
-
-```bash
-npm run dev       # start dev server (Turbopack, default)
-npm run build     # production build (does NOT lint — run lint separately)
-npm run start     # start production server
-npm run lint      # ESLint via eslint CLI (not next lint)
-```
 
 No test runner is configured yet.
 
@@ -26,6 +18,11 @@ No test runner is configured yet.
 - **`next lint` is removed** — use the `eslint` CLI directly (already configured in `package.json`).
 - App Router is used (`app/` directory). Do not create a `pages/` directory.
 - Always read `node_modules/next/dist/docs/` for the API before writing Next.js-specific code.
+
+## Skills
+
+Usa siempre /frontend-design para diseñar la interfaz de usuario. 
+
 
 ## Architecture
 
