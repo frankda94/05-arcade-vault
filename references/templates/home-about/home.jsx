@@ -1,26 +1,19 @@
-"use client";
-
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { GAMES, type Game } from "@/lib/data";
+// ===== home.jsx — Landing page =====
+const { useEffect: useEffectH, useRef: useRefH, useState: useStateH } = React;
 
 function useReveal() {
-  useEffect(() => {
+  useEffectH(() => {
     const els = document.querySelectorAll(".reveal");
     const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
-          e.target.classList.add("in");
-          io.unobserve(e.target);
-        }
-      });
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
     }, { threshold: 0.12 });
-    els.forEach((el) => io.observe(el));
+    els.forEach(el => io.observe(el));
     return () => io.disconnect();
   }, []);
 }
 
 function FloatingSilhouettes() {
+  // Decorative pixel silhouettes of classic arcade shapes
   return (
     <div className="home-silos" aria-hidden="true">
       <svg className="silo s1" viewBox="0 0 40 32"><g fill="#00f5ff">
@@ -90,7 +83,7 @@ function FloatingSilhouettes() {
   );
 }
 
-function MiniCard({ game, onClick }: { game: Game; onClick: () => void }) {
+function MiniCard({ game, onClick }) {
   return (
     <div className="mini-card" onClick={onClick}>
       <div className="mini-cover"><div className={"cover-bg " + game.cover}></div></div>
@@ -102,50 +95,8 @@ function MiniCard({ game, onClick }: { game: Game; onClick: () => void }) {
   );
 }
 
-function FeatureIcon({ kind }: { kind: string }) {
-  const C = "currentColor";
-  if (kind === "GAMEPAD") return (
-    <svg className="ft-icon" viewBox="0 0 16 16"><g fill={C}>
-      <rect x="2" y="6" width="12" height="6"/>
-      <rect x="0" y="8" width="2" height="4"/><rect x="14" y="8" width="2" height="4"/>
-      <rect x="3" y="8" width="2" height="2"/><rect x="2" y="9" width="4" height="0.5"/>
-      <rect x="11" y="7" width="1.5" height="1.5"/><rect x="11" y="10" width="1.5" height="1.5"/>
-    </g></svg>
-  );
-  if (kind === "FREE") return (
-    <svg className="ft-icon" viewBox="0 0 16 16"><g fill={C}>
-      <rect x="3" y="3" width="10" height="10" fill="none" stroke={C} strokeWidth="1.5"/>
-      <rect x="5" y="6" width="1.5" height="4"/><rect x="5" y="6" width="4" height="1.5"/><rect x="5" y="8" width="3" height="1"/>
-      <rect x="10" y="6" width="1.5" height="4"/>
-    </g></svg>
-  );
-  if (kind === "TROPHY") return (
-    <svg className="ft-icon" viewBox="0 0 16 16"><g fill={C}>
-      <rect x="3" y="2" width="10" height="2"/>
-      <rect x="3" y="2" width="2" height="6"/><rect x="11" y="2" width="2" height="6"/>
-      <rect x="5" y="8" width="6" height="2"/>
-      <rect x="7" y="10" width="2" height="3"/>
-      <rect x="5" y="13" width="6" height="1.5"/>
-      <rect x="1" y="3" width="2" height="3"/><rect x="13" y="3" width="2" height="3"/>
-    </g></svg>
-  );
-  if (kind === "ROCKET") return (
-    <svg className="ft-icon" viewBox="0 0 16 16"><g fill={C}>
-      <rect x="7" y="1" width="2" height="2"/>
-      <rect x="6" y="3" width="4" height="2"/>
-      <rect x="5" y="5" width="6" height="6"/>
-      <rect x="4" y="11" width="2" height="2"/><rect x="10" y="11" width="2" height="2"/>
-      <rect x="7" y="6" width="2" height="2" fill="#0a0a0f"/>
-      <rect x="6" y="13" width="1" height="2"/><rect x="9" y="13" width="1" height="2"/>
-    </g></svg>
-  );
-  return null;
-}
-
-export default function Home() {
+function Home({ navigate }) {
   useReveal();
-  const router = useRouter();
-
   return (
     <div className="home fade-in">
       {/* HERO */}
@@ -163,8 +114,8 @@ export default function Home() {
             Sin descargas. Sin costo. Solo diversión.
           </p>
           <div className="home-ctas">
-            <button className="btn xl pulse" onClick={() => router.push("/biblioteca")}>▶  EXPLORAR JUEGOS</button>
-            <button className="btn xl magenta" onClick={() => router.push("/login")}>✦  CREAR CUENTA</button>
+            <button className="btn xl pulse" onClick={() => navigate({ name: "biblioteca" })}>▶  EXPLORAR JUEGOS</button>
+            <button className="btn xl magenta" onClick={() => navigate({ name: "auth" })}>✦  CREAR CUENTA</button>
           </div>
           <div className="hero-scroll" aria-hidden="true">
             <span>DESLIZA</span>
@@ -204,12 +155,12 @@ export default function Home() {
           <div className="section-rule"></div>
         </div>
         <div className="mini-rail">
-          {GAMES.slice(0, 6).map((g) => (
-            <MiniCard key={g.id} game={g} onClick={() => router.push(`/juego/${g.id}`)} />
+          {GAMES.slice(0, 6).map(g => (
+            <MiniCard key={g.id} game={g} onClick={() => navigate({ name: "detalle", id: g.id })} />
           ))}
         </div>
         <div style={{ textAlign: "center", marginTop: 24 }}>
-          <button className="btn lg" onClick={() => router.push("/biblioteca")}>VER TODOS LOS JUEGOS →</button>
+          <button className="btn lg" onClick={() => navigate({ name: "biblioteca" })}>VER TODOS LOS JUEGOS →</button>
         </div>
       </section>
 
@@ -265,7 +216,7 @@ export default function Home() {
           <div className="activity-card">
             <div className="ac-head">
               <div className="ac-title pixel neon-magenta">▸ TOP JUGADORES · HOY</div>
-              <button className="lb-link" onClick={() => router.push("/salon-fama")}>VER SALÓN →</button>
+              <button className="lb-link" onClick={() => navigate({ name: "salon" })}>VER SALÓN →</button>
             </div>
             <div className="top-list">
               {[
@@ -311,7 +262,7 @@ export default function Home() {
               <li>✔ Nuevos juegos cada mes</li>
               <li>✔ Funciona en cualquier navegador</li>
             </ul>
-            <button className="btn xl pulse" style={{ width: "100%" }} onClick={() => router.push("/login")}>EMPEZAR GRATIS →</button>
+            <button className="btn xl pulse" style={{ width: "100%" }} onClick={() => navigate({ name: "auth" })}>EMPEZAR GRATIS →</button>
             <div className="pc-foot">No pedimos tarjeta. Nunca lo haremos.</div>
             <div className="pc-stamp pixel">FREE<br/>PLAY</div>
           </div>
@@ -336,9 +287,52 @@ export default function Home() {
       {/* FINAL CTA */}
       <section className="home-final reveal">
         <h2 className="final-title pixel">¿LISTO PARA JUGAR?</h2>
-        <button className="btn xl pulse final-cta" onClick={() => router.push("/biblioteca")}>INSERTAR MONEDA →</button>
+        <button className="btn xl pulse final-cta" onClick={() => navigate({ name: "biblioteca" })}>INSERTAR MONEDA →</button>
         <div className="final-tag">Gratis. Sin registro obligatorio. Empieza en segundos.</div>
       </section>
     </div>
   );
 }
+
+function FeatureIcon({ kind }) {
+  // Pixel-style 12x12 SVG icons drawn from rects, glow per parent color
+  const C = "currentColor";
+  if (kind === "GAMEPAD") return (
+    <svg className="ft-icon" viewBox="0 0 16 16"><g fill={C}>
+      <rect x="2" y="6" width="12" height="6"/>
+      <rect x="0" y="8" width="2" height="4"/><rect x="14" y="8" width="2" height="4"/>
+      <rect x="3" y="8" width="2" height="2"/><rect x="2" y="9" width="4" height="0.5"/>
+      <rect x="11" y="7" width="1.5" height="1.5"/><rect x="11" y="10" width="1.5" height="1.5"/>
+    </g></svg>
+  );
+  if (kind === "FREE") return (
+    <svg className="ft-icon" viewBox="0 0 16 16"><g fill={C}>
+      <rect x="3" y="3" width="10" height="10" fill="none" stroke={C} strokeWidth="1.5"/>
+      <rect x="5" y="6" width="1.5" height="4"/><rect x="5" y="6" width="4" height="1.5"/><rect x="5" y="8" width="3" height="1"/>
+      <rect x="10" y="6" width="1.5" height="4"/>
+    </g></svg>
+  );
+  if (kind === "TROPHY") return (
+    <svg className="ft-icon" viewBox="0 0 16 16"><g fill={C}>
+      <rect x="3" y="2" width="10" height="2"/>
+      <rect x="3" y="2" width="2" height="6"/><rect x="11" y="2" width="2" height="6"/>
+      <rect x="5" y="8" width="6" height="2"/>
+      <rect x="7" y="10" width="2" height="3"/>
+      <rect x="5" y="13" width="6" height="1.5"/>
+      <rect x="1" y="3" width="2" height="3"/><rect x="13" y="3" width="2" height="3"/>
+    </g></svg>
+  );
+  if (kind === "ROCKET") return (
+    <svg className="ft-icon" viewBox="0 0 16 16"><g fill={C}>
+      <rect x="7" y="1" width="2" height="2"/>
+      <rect x="6" y="3" width="4" height="2"/>
+      <rect x="5" y="5" width="6" height="6"/>
+      <rect x="4" y="11" width="2" height="2"/><rect x="10" y="11" width="2" height="2"/>
+      <rect x="7" y="6" width="2" height="2" fill="#0a0a0f"/>
+      <rect x="6" y="13" width="1" height="2"/><rect x="9" y="13" width="1" height="2"/>
+    </g></svg>
+  );
+  return null;
+}
+
+window.Home = Home;
