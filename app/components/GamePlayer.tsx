@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { Game } from "@/lib/data";
+import Asteroides from "./games/Asteroides";
 
 export default function GamePlayer({ game }: { game: Game }) {
   const router = useRouter();
+  const isAsteroides = game.id === "asteroides";
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);
   const [paused, setPaused] = useState(false);
@@ -14,21 +16,42 @@ export default function GamePlayer({ game }: { game: Game }) {
   const [name, setName] = useState("INVITADO");
   const [saved, setSaved] = useState(false);
 
-  const level = Math.floor(score / 2500) + 1;
+  const [astScore, setAstScore] = useState(0);
+  const [astLives, setAstLives] = useState(3);
+  const [astLevel, setAstLevel] = useState(1);
+  const [astPowerUp, setAstPowerUp] = useState(0);
+  const [resetSignal, setResetSignal] = useState(0);
+  const [endSignal, setEndSignal] = useState(0);
+
+  const displayScore = isAsteroides ? astScore : score;
+  const displayLives = isAsteroides ? astLives : lives;
+  const level = isAsteroides ? astLevel : Math.floor(score / 2500) + 1;
 
   useEffect(() => {
-    if (over || paused) return;
-    const t = setInterval(() => setScore((s) => s + Math.floor(10 + Math.random() * 90)), 220);
+    if (isAsteroides || over || paused) return;
+    const t = setInterval(
+      () => setScore((s) => s + Math.floor(10 + Math.random() * 90)),
+      220,
+    );
     return () => clearInterval(t);
-  }, [over, paused]);
+  }, [isAsteroides, over, paused]);
 
   const endGame = () => setOver(true);
+  const forceEnd = () => {
+    if (isAsteroides) setEndSignal((s) => s + 1);
+    else endGame();
+  };
   const restart = () => {
     setScore(0);
     setLives(3);
+    setAstScore(0);
+    setAstLives(3);
+    setAstLevel(1);
+    setAstPowerUp(0);
     setPaused(false);
     setOver(false);
     setSaved(false);
+    if (isAsteroides) setResetSignal((s) => s + 1);
   };
 
   return (
@@ -43,25 +66,36 @@ export default function GamePlayer({ game }: { game: Game }) {
           </div>
           <div className="hud-stat">
             <div className="l">Puntuación</div>
-            <div className="v">{score.toLocaleString("es-ES")}</div>
+            <div className="v">{displayScore.toLocaleString("es-ES")}</div>
           </div>
           <div className="hud-stat lives">
             <div className="l">Vidas</div>
-            <div className="v">{"♥ ".repeat(lives).trim() || "—"}</div>
+            <div className="v">{"♥ ".repeat(displayLives).trim() || "—"}</div>
           </div>
           <div className="hud-stat level">
             <div className="l">Nivel</div>
             <div className="v">{String(level).padStart(2, "0")}</div>
           </div>
+          {isAsteroides && astPowerUp > 0 && (
+            <div className="hud-stat">
+              <div className="l">Power-up</div>
+              <div className="v" style={{ color: "var(--cyan)" }}>
+                3x {astPowerUp.toFixed(1)}s
+              </div>
+            </div>
+          )}
         </div>
         <div className="hud-actions">
           <button className="btn yellow" onClick={() => setPaused((p) => !p)}>
             {paused ? "REANUDAR" : "PAUSA"}
           </button>
-          <button className="btn magenta" onClick={endGame}>
+          <button className="btn magenta" onClick={forceEnd}>
             FIN
           </button>
-          <button className="btn ghost" onClick={() => router.push(`/juego/${game.id}`)}>
+          <button
+            className="btn ghost"
+            onClick={() => router.push(`/juego/${game.id}`)}
+          >
             SALIR
           </button>
         </div>
@@ -70,21 +104,44 @@ export default function GamePlayer({ game }: { game: Game }) {
       <div className="crt">
         <div className="crt-screen">
           <div className="game-arena">
-            <div className="grid-floor"></div>
-            <div className="enemy e1"></div>
-            <div className="enemy e2"></div>
-            <div className="enemy e3"></div>
-            <div className="player-ship"></div>
+            {isAsteroides ? (
+              <Asteroides
+                paused={paused}
+                resetSignal={resetSignal}
+                endSignal={endSignal}
+                onScoreChange={setAstScore}
+                onLivesChange={setAstLives}
+                onLevelChange={setAstLevel}
+                onPowerUpChange={setAstPowerUp}
+                onGameOver={endGame}
+              />
+            ) : (
+              <>
+                <div className="grid-floor"></div>
+                <div className="enemy e1"></div>
+                <div className="enemy e2"></div>
+                <div className="enemy e3"></div>
+                <div className="player-ship"></div>
+              </>
+            )}
           </div>
           {paused && (
-            <div className="crt-content" style={{ background: "rgba(0,0,0,0.6)", zIndex: 5 }}>
+            <div
+              className="crt-content"
+              style={{ background: "rgba(0,0,0,0.6)", zIndex: 5 }}
+            >
               <div>
                 <div className="pixel neon-yellow" style={{ fontSize: 22 }}>
                   EN PAUSA
                 </div>
                 <div
                   className="mono"
-                  style={{ fontSize: 11, color: "var(--ink-dim)", marginTop: 10, letterSpacing: "0.16em" }}
+                  style={{
+                    fontSize: 11,
+                    color: "var(--ink-dim)",
+                    marginTop: 10,
+                    letterSpacing: "0.16em",
+                  }}
                 >
                   PULSA REANUDAR PARA CONTINUAR
                 </div>
@@ -104,12 +161,14 @@ export default function GamePlayer({ game }: { game: Game }) {
           <div className="modal">
             <h2>FIN DEL JUEGO</h2>
             <div className="final-label">PUNTUACIÓN FINAL</div>
-            <div className="final">{score.toLocaleString("es-ES")}</div>
+            <div className="final">{displayScore.toLocaleString("es-ES")}</div>
             {!saved ? (
               <div className="input-row">
                 <input
                   value={name}
-                  onChange={(e) => setName(e.target.value.toUpperCase().slice(0, 10))}
+                  onChange={(e) =>
+                    setName(e.target.value.toUpperCase().slice(0, 10))
+                  }
                   placeholder="TUS INICIALES"
                 />
                 <button className="btn yellow" onClick={() => setSaved(true)}>
