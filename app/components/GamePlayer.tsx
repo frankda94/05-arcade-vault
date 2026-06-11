@@ -37,6 +37,10 @@ export default function GamePlayer({ game }: { game: Game }) {
   }, [isAsteroides, over, paused]);
 
   const endGame = () => setOver(true);
+  const forceEnd = () => {
+    if (isAsteroides) setEndSignal((s) => s + 1);
+    else endGame();
+  };
   const restart = () => {
     setScore(0);
     setLives(3);
@@ -47,6 +51,7 @@ export default function GamePlayer({ game }: { game: Game }) {
     setPaused(false);
     setOver(false);
     setSaved(false);
+    if (isAsteroides) setResetSignal((s) => s + 1);
   };
 
   return (
@@ -84,7 +89,7 @@ export default function GamePlayer({ game }: { game: Game }) {
           <button className="btn yellow" onClick={() => setPaused((p) => !p)}>
             {paused ? "REANUDAR" : "PAUSA"}
           </button>
-          <button className="btn magenta" onClick={endGame}>
+          <button className="btn magenta" onClick={forceEnd}>
             FIN
           </button>
           <button
