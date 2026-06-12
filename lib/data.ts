@@ -100,6 +100,17 @@ export const GAMES: Game[] = [
     plays: "1.8K",
   },
   {
+    id: "tetris",
+    title: "TETRIS",
+    short: "El clásico de las piezas que caen: encaja, gira y limpia líneas.",
+    long: "El tablero vertical de 10x20 recibe las siete piezas clásicas, más una pieza extra en forma de tuerca como guiño mecánico. Gíralas con wall-kicks, usa la pieza fantasma para planificar la caída y completa filas enteras para que desaparezcan, mientras la velocidad aumenta sin piedad cada 10 líneas. Una pieza atascada en lo alto y el mecanismo se detiene para siempre.",
+    cat: "PUZZLE",
+    cover: "cover-tetris",
+    color: "yellow",
+    best: 215000,
+    plays: "2.3K",
+  },
+  {
     id: "ranaria",
     title: "RANARIA",
     short: "Cruza la autopista de pixeles.",

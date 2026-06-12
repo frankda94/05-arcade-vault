@@ -2,7 +2,7 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { GAMES, seededScores } from "@/lib/data";
-import { getAsteroidesScores } from "@/lib/leaderboard";
+import { getGameScores, getRealGameIds } from "@/lib/leaderboard";
 import { createClient } from "@/utils/supabase/server";
 
 export default async function GameDetail({
@@ -14,10 +14,11 @@ export default async function GameDetail({
   const game = GAMES.find((g) => g.id === id);
   if (!game) notFound();
 
-  const scores =
-    id === "asteroides"
-      ? await getAsteroidesScores(createClient(await cookies()))
-      : seededScores(id.length * 17 + 3, 10);
+  const supabase = createClient(await cookies());
+  const realGameIds = await getRealGameIds(supabase);
+  const scores = realGameIds.includes(id)
+    ? await getGameScores(supabase, id)
+    : seededScores(id.length * 17 + 3, 10);
 
   return (
     <div className="av-detail fade-in">
