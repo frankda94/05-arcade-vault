@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { Game } from "@/lib/data";
+import { saveAsteroidesScore } from "@/lib/leaderboard";
+import { createClient } from "@/utils/supabase/client";
 import Asteroides from "./games/Asteroides";
 
 export default function GamePlayer({ game }: { game: Game }) {
@@ -41,6 +43,13 @@ export default function GamePlayer({ game }: { game: Game }) {
     if (isAsteroides) setEndSignal((s) => s + 1);
     else endGame();
   };
+  const saveScore = async () => {
+    if (isAsteroides) {
+      await saveAsteroidesScore(createClient(), name, displayScore);
+    }
+    setSaved(true);
+  };
+
   const restart = () => {
     setScore(0);
     setLives(3);
@@ -171,7 +180,7 @@ export default function GamePlayer({ game }: { game: Game }) {
                   }
                   placeholder="TUS INICIALES"
                 />
-                <button className="btn yellow" onClick={() => setSaved(true)}>
+                <button className="btn yellow" onClick={saveScore}>
                   GUARDAR PUNTUACIÓN
                 </button>
               </div>
