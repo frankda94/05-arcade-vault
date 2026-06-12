@@ -3,21 +3,26 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { GAMES, seededScores, type ScoreRow } from "@/lib/data";
-import { getAsteroidesScores } from "@/lib/leaderboard";
+import { getGameScores, getRealGameIds } from "@/lib/leaderboard";
 import { createClient } from "@/utils/supabase/client";
 
 export default function HallOfFame() {
   const router = useRouter();
   const [tab, setTab] = useState(GAMES[0].id);
   const mockRows = useMemo(() => seededScores(tab.length * 23 + 7, 12), [tab]);
-  const [asteroidesRows, setAsteroidesRows] = useState<ScoreRow[]>([]);
+  const [realGameIds, setRealGameIds] = useState<string[]>([]);
+  const [realRows, setRealRows] = useState<ScoreRow[]>([]);
 
   useEffect(() => {
-    if (tab !== "asteroides") return;
-    getAsteroidesScores(createClient()).then(setAsteroidesRows);
-  }, [tab]);
+    getRealGameIds(createClient()).then(setRealGameIds);
+  }, []);
 
-  const rows = tab === "asteroides" ? asteroidesRows : mockRows;
+  useEffect(() => {
+    if (!realGameIds.includes(tab)) return;
+    getGameScores(createClient(), tab).then(setRealRows);
+  }, [tab, realGameIds]);
+
+  const rows = realGameIds.includes(tab) ? realRows : mockRows;
 
   return (
     <div className="av-hall fade-in">

@@ -4,13 +4,15 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { Game } from "@/lib/data";
-import { saveAsteroidesScore } from "@/lib/leaderboard";
+import { saveGameScore } from "@/lib/leaderboard";
 import { createClient } from "@/utils/supabase/client";
 import Asteroides from "./games/Asteroides";
+import Tetris from "./games/Tetris";
 
 export default function GamePlayer({ game }: { game: Game }) {
   const router = useRouter();
   const isAsteroides = game.id === "asteroides";
+  const isTetris = game.id === "tetris";
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);
   const [paused, setPaused] = useState(false);
@@ -22,30 +24,39 @@ export default function GamePlayer({ game }: { game: Game }) {
   const [astLives, setAstLives] = useState(3);
   const [astLevel, setAstLevel] = useState(1);
   const [astPowerUp, setAstPowerUp] = useState(0);
+  const [tetScore, setEngScore] = useState(0);
+  const [tetLines, setEngLines] = useState(0);
+  const [tetLevel, setEngLevel] = useState(1);
   const [resetSignal, setResetSignal] = useState(0);
   const [endSignal, setEndSignal] = useState(0);
 
-  const displayScore = isAsteroides ? astScore : score;
+  const displayScore = isAsteroides ? astScore : isTetris ? tetScore : score;
   const displayLives = isAsteroides ? astLives : lives;
-  const level = isAsteroides ? astLevel : Math.floor(score / 2500) + 1;
+  const level = isAsteroides
+    ? astLevel
+    : isTetris
+      ? tetLevel
+      : Math.floor(score / 2500) + 1;
 
   useEffect(() => {
-    if (isAsteroides || over || paused) return;
+    if (isAsteroides || isTetris || over || paused) return;
     const t = setInterval(
       () => setScore((s) => s + Math.floor(10 + Math.random() * 90)),
       220,
     );
     return () => clearInterval(t);
-  }, [isAsteroides, over, paused]);
+  }, [isAsteroides, isTetris, over, paused]);
 
   const endGame = () => setOver(true);
   const forceEnd = () => {
-    if (isAsteroides) setEndSignal((s) => s + 1);
+    if (isAsteroides || isTetris) setEndSignal((s) => s + 1);
     else endGame();
   };
   const saveScore = async () => {
     if (isAsteroides) {
-      await saveAsteroidesScore(createClient(), name, displayScore);
+      await saveGameScore(createClient(), "asteroides", name, displayScore);
+    } else if (isTetris) {
+      await saveGameScore(createClient(), "tetris", name, displayScore);
     }
     setSaved(true);
   };
@@ -57,10 +68,13 @@ export default function GamePlayer({ game }: { game: Game }) {
     setAstLives(3);
     setAstLevel(1);
     setAstPowerUp(0);
+    setEngScore(0);
+    setEngLines(0);
+    setEngLevel(1);
     setPaused(false);
     setOver(false);
     setSaved(false);
-    if (isAsteroides) setResetSignal((s) => s + 1);
+    if (isAsteroides || isTetris) setResetSignal((s) => s + 1);
   };
 
   return (
@@ -78,8 +92,10 @@ export default function GamePlayer({ game }: { game: Game }) {
             <div className="v">{displayScore.toLocaleString("es-ES")}</div>
           </div>
           <div className="hud-stat lives">
-            <div className="l">Vidas</div>
-            <div className="v">{"♥ ".repeat(displayLives).trim() || "—"}</div>
+            <div className="l">{isTetris ? "Líneas" : "Vidas"}</div>
+            <div className="v">
+              {isTetris ? tetLines : "♥ ".repeat(displayLives).trim() || "—"}
+            </div>
           </div>
           <div className="hud-stat level">
             <div className="l">Nivel</div>
@@ -122,6 +138,17 @@ export default function GamePlayer({ game }: { game: Game }) {
                 onLivesChange={setAstLives}
                 onLevelChange={setAstLevel}
                 onPowerUpChange={setAstPowerUp}
+                onGameOver={endGame}
+              />
+            ) : isTetris ? (
+              <Tetris
+                paused={paused}
+                resetSignal={resetSignal}
+                endSignal={endSignal}
+                onScoreChange={setEngScore}
+                onLinesChange={setEngLines}
+                onLevelChange={setEngLevel}
+                onTogglePause={() => setPaused((p) => !p)}
                 onGameOver={endGame}
               />
             ) : (
