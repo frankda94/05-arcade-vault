@@ -1,28 +1,29 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { GAMES, seededScores, type ScoreRow } from "@/lib/data";
-import { getGameScores, getRealGameIds } from "@/lib/leaderboard";
+import { type Game, type ScoreRow } from "@/lib/data";
+import { getGames } from "@/lib/games";
+import { getGameScores } from "@/lib/leaderboard";
 import { createClient } from "@/utils/supabase/client";
 
 export default function HallOfFame() {
   const router = useRouter();
-  const [tab, setTab] = useState(GAMES[0].id);
-  const mockRows = useMemo(() => seededScores(tab.length * 23 + 7, 12), [tab]);
-  const [realGameIds, setRealGameIds] = useState<string[]>([]);
-  const [realRows, setRealRows] = useState<ScoreRow[]>([]);
+  const [games, setGames] = useState<Game[]>([]);
+  const [tab, setTab] = useState("");
+  const [rows, setRows] = useState<ScoreRow[]>([]);
 
   useEffect(() => {
-    getRealGameIds(createClient()).then(setRealGameIds);
+    getGames(createClient()).then((data) => {
+      setGames(data);
+      setTab(data[0]?.id ?? "");
+    });
   }, []);
 
   useEffect(() => {
-    if (!realGameIds.includes(tab)) return;
-    getGameScores(createClient(), tab).then(setRealRows);
-  }, [tab, realGameIds]);
-
-  const rows = realGameIds.includes(tab) ? realRows : mockRows;
+    if (!tab) return;
+    getGameScores(createClient(), tab).then(setRows);
+  }, [tab]);
 
   return (
     <div className="av-hall fade-in">
@@ -34,7 +35,7 @@ export default function HallOfFame() {
       </div>
 
       <div className="hall-tabs">
-        {GAMES.map((g) => (
+        {games.map((g) => (
           <button
             key={g.id}
             className={"chip" + (tab === g.id ? " active" : "")}
