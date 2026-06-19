@@ -56,6 +56,10 @@ Each engine takes `paused`/`resetSignal`/`endSignal` props and emits score/level
 - Diseña features con **/spec** antes de implementarlas con **/spec-impl**.
 - Playwright screenshots → guardar en `.playwright-screenshots/`.
 
+## Agents
+
+- **game-planner** (`.claude/agents/game-planner.md`) — piensa y decide qué nuevo juego encaja con el catálogo. Analiza huecos (categoría/color/mecánica), originalidad y viabilidad, propone candidatos y mantiene memoria de sugerencias previas en `game-suggestions.md` (raíz). Solo propone y registra; luego usa `/spec` para diseñar el elegido.
+
 ## Architecture
 
 - `app/layout.tsx` — root layout with Geist fonts, sets `<html>`/`<body>` with Tailwind base classes; renders `Nav`.
