@@ -9,12 +9,53 @@ import { createClient } from "@/utils/supabase/client";
 import Asteroides from "./games/Asteroides";
 import Tetris from "./games/Tetris";
 import Snake from "./games/Snake";
+import TouchControls, { type TouchControlsProps } from "./games/TouchControls";
+import { useIsTouchDevice } from "@/lib/useIsTouchDevice";
+
+const ASTEROIDES_TOUCH: TouchControlsProps = {
+  dpad: {
+    left: { code: "ArrowLeft", label: "◀", mode: "hold" },
+    right: { code: "ArrowRight", label: "▶", mode: "hold" },
+    up: { code: "ArrowUp", label: "▲", mode: "hold" },
+  },
+  actions: [{ code: "Space", label: "DISPARAR", mode: "tap" }],
+};
+
+const TETRIS_TOUCH: TouchControlsProps = {
+  dpad: {
+    left: { code: "ArrowLeft", label: "◀", mode: "repeat" },
+    right: { code: "ArrowRight", label: "▶", mode: "repeat" },
+    down: { code: "ArrowDown", label: "▼", mode: "repeat" },
+  },
+  actions: [
+    { code: "ArrowUp", label: "ROTAR", mode: "tap" },
+    { code: "Space", label: "CAÍDA", mode: "tap" },
+  ],
+};
+
+const SNAKE_TOUCH: TouchControlsProps = {
+  dpad: {
+    up: { code: "ArrowUp", label: "▲", mode: "tap" },
+    down: { code: "ArrowDown", label: "▼", mode: "tap" },
+    left: { code: "ArrowLeft", label: "◀", mode: "tap" },
+    right: { code: "ArrowRight", label: "▶", mode: "tap" },
+  },
+  actions: [],
+};
 
 export default function GamePlayer({ game }: { game: Game }) {
   const router = useRouter();
   const isAsteroides = game.id === "asteroides";
   const isTetris = game.id === "tetris";
   const isSnake = game.id === "snake";
+  const isTouch = useIsTouchDevice();
+  const touchConfig = isAsteroides
+    ? ASTEROIDES_TOUCH
+    : isTetris
+      ? TETRIS_TOUCH
+      : isSnake
+        ? SNAKE_TOUCH
+        : null;
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);
   const [paused, setPaused] = useState(false);
@@ -219,6 +260,12 @@ export default function GamePlayer({ game }: { game: Game }) {
             </div>
           )}
         </div>
+        {isTouch && touchConfig && (
+          <TouchControls
+            dpad={touchConfig.dpad}
+            actions={touchConfig.actions}
+          />
+        )}
         <div className="crt-bottom">
           <span className="led">SEÑAL OK</span>
           <span>{game.title} · CRT-83 · 60 HZ</span>

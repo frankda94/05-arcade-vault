@@ -1217,6 +1217,60 @@ a {
   box-shadow: 0 0 6px var(--green);
 }
 
+/* touch controls */
+.touch-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 14px;
+  padding: 10px 4px;
+}
+.touch-dpad {
+  display: grid;
+  grid-template-columns: repeat(3, 44px);
+  grid-template-rows: repeat(3, 44px);
+  gap: 4px;
+}
+.touch-dpad-row {
+  display: contents;
+}
+.touch-dpad-spacer {
+  width: 44px;
+  height: 44px;
+}
+.touch-actions {
+  display: flex;
+  gap: 10px;
+}
+.touch-btn {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--pixel);
+  font-size: 9px;
+  background: rgba(0, 245, 255, 0.06);
+  color: var(--cyan);
+  border: 1px solid var(--cyan);
+  border-radius: 8px;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+}
+.touch-actions .touch-btn {
+  width: auto;
+  min-width: 64px;
+  padding: 0 14px;
+  letter-spacing: 0.1em;
+}
+.touch-btn:active {
+  background: rgba(0, 245, 255, 0.25);
+  box-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
+}
+
 /* fake in-screen game */
 .game-arena {
   position: absolute;
