@@ -1,6 +1,6 @@
 // ===== data.ts — shared mock data =====
 
-export type GameColor = "cyan" | "magenta" | "yellow" | "green";
+export type GameColor = "cyan" | "magenta" | "yellow" | "green" | "lime";
 
 export interface Game {
   id: string;

@@ -9,6 +9,7 @@ import { createClient } from "@/utils/supabase/client";
 import Asteroides from "./games/Asteroides";
 import Tetris from "./games/Tetris";
 import Snake from "./games/Snake";
+import Frogger from "./games/Frogger";
 import TouchControls, { type TouchControlsProps } from "./games/TouchControls";
 import { useIsTouchDevice } from "@/lib/useIsTouchDevice";
 
@@ -43,11 +44,22 @@ const SNAKE_TOUCH: TouchControlsProps = {
   actions: [],
 };
 
+const FROGGER_TOUCH: TouchControlsProps = {
+  dpad: {
+    up: { code: "ArrowUp", label: "▲", mode: "tap" },
+    down: { code: "ArrowDown", label: "▼", mode: "tap" },
+    left: { code: "ArrowLeft", label: "◀", mode: "tap" },
+    right: { code: "ArrowRight", label: "▶", mode: "tap" },
+  },
+  actions: [],
+};
+
 export default function GamePlayer({ game }: { game: Game }) {
   const router = useRouter();
   const isAsteroides = game.id === "asteroides";
   const isTetris = game.id === "tetris";
   const isSnake = game.id === "snake";
+  const isFrogger = game.id === "frogger";
   const isTouch = useIsTouchDevice();
   const touchConfig = isAsteroides
     ? ASTEROIDES_TOUCH
@@ -55,7 +67,9 @@ export default function GamePlayer({ game }: { game: Game }) {
       ? TETRIS_TOUCH
       : isSnake
         ? SNAKE_TOUCH
-        : null;
+        : isFrogger
+          ? FROGGER_TOUCH
+          : null;
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);
   const [paused, setPaused] = useState(false);
@@ -73,6 +87,9 @@ export default function GamePlayer({ game }: { game: Game }) {
   const [snkScore, setSnkScore] = useState(0);
   const [snkLength, setSnkLength] = useState(3);
   const [snkLevel, setSnkLevel] = useState(1);
+  const [frgScore, setFrgScore] = useState(0);
+  const [frgLives, setFrgLives] = useState(3);
+  const [frgLevel, setFrgLevel] = useState(1);
   const [resetSignal, setResetSignal] = useState(0);
   const [endSignal, setEndSignal] = useState(0);
 
@@ -82,28 +99,34 @@ export default function GamePlayer({ game }: { game: Game }) {
       ? tetScore
       : isSnake
         ? snkScore
-        : score;
-  const displayLives = isAsteroides ? astLives : lives;
+        : isFrogger
+          ? frgScore
+          : score;
+  const displayLives = isAsteroides ? astLives : isFrogger ? frgLives : lives;
   const level = isAsteroides
     ? astLevel
     : isTetris
       ? tetLevel
       : isSnake
         ? snkLevel
-        : Math.floor(score / 2500) + 1;
+        : isFrogger
+          ? frgLevel
+          : Math.floor(score / 2500) + 1;
 
   useEffect(() => {
-    if (isAsteroides || isTetris || isSnake || over || paused) return;
+    if (isAsteroides || isTetris || isSnake || isFrogger || over || paused)
+      return;
     const t = setInterval(
       () => setScore((s) => s + Math.floor(10 + Math.random() * 90)),
       220,
     );
     return () => clearInterval(t);
-  }, [isAsteroides, isTetris, isSnake, over, paused]);
+  }, [isAsteroides, isTetris, isSnake, isFrogger, over, paused]);
 
   const endGame = () => setOver(true);
   const forceEnd = () => {
-    if (isAsteroides || isTetris || isSnake) setEndSignal((s) => s + 1);
+    if (isAsteroides || isTetris || isSnake || isFrogger)
+      setEndSignal((s) => s + 1);
     else endGame();
   };
   const saveScore = async () => {
@@ -113,6 +136,8 @@ export default function GamePlayer({ game }: { game: Game }) {
       await saveGameScore(createClient(), "tetris", name, displayScore);
     } else if (isSnake) {
       await saveGameScore(createClient(), "snake", name, displayScore);
+    } else if (isFrogger) {
+      await saveGameScore(createClient(), "frogger", name, displayScore);
     }
     setSaved(true);
   };
@@ -130,10 +155,14 @@ export default function GamePlayer({ game }: { game: Game }) {
     setSnkScore(0);
     setSnkLength(3);
     setSnkLevel(1);
+    setFrgScore(0);
+    setFrgLives(3);
+    setFrgLevel(1);
     setPaused(false);
     setOver(false);
     setSaved(false);
-    if (isAsteroides || isTetris || isSnake) setResetSignal((s) => s + 1);
+    if (isAsteroides || isTetris || isSnake || isFrogger)
+      setResetSignal((s) => s + 1);
   };
 
   return (
@@ -224,6 +253,16 @@ export default function GamePlayer({ game }: { game: Game }) {
                 onScoreChange={setSnkScore}
                 onLengthChange={setSnkLength}
                 onLevelChange={setSnkLevel}
+                onGameOver={endGame}
+              />
+            ) : isFrogger ? (
+              <Frogger
+                paused={paused}
+                resetSignal={resetSignal}
+                endSignal={endSignal}
+                onScoreChange={setFrgScore}
+                onLivesChange={setFrgLives}
+                onLevelChange={setFrgLevel}
                 onGameOver={endGame}
               />
             ) : (
