@@ -12,6 +12,7 @@
   --magenta: #ff006e;
   --yellow: #f5ff00;
   --green: #00ff88;
+  --lime: #aef522;
   --gold: #ffcf3a;
   --silver: #c7d0e0;
   --bronze: #d97a3a;
@@ -415,6 +416,15 @@ a {
     0 0 14px rgba(245, 255, 0, 0.6),
     inset 0 0 8px rgba(245, 255, 0, 0.35);
 }
+.btn.lime {
+  border-color: var(--lime);
+}
+.btn.lime:hover {
+  color: var(--lime);
+  box-shadow:
+    0 0 14px rgba(174, 245, 34, 0.6),
+    inset 0 0 8px rgba(174, 245, 34, 0.35);
+}
 .btn.ghost {
   border-color: var(--ink-faint);
   color: var(--ink-dim);
@@ -725,6 +735,30 @@ a {
     linear-gradient(90deg, var(--green) 0 12px, transparent 12px)
       calc(20% + 28px) calc(50% - 12px) / 12px 12px no-repeat;
   filter: drop-shadow(0 0 6px rgba(0, 255, 136, 0.6));
+}
+
+.cover-frogger {
+  background: linear-gradient(
+    180deg,
+    #0a3d0a 0%,
+    #0a3d0a 22%,
+    #1a1a1a 22%,
+    #1a1a1a 78%,
+    #062a3d 78%,
+    #062a3d 100%
+  );
+}
+.cover-frogger::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 50% 12%, var(--lime) 0 9px, transparent 10px),
+    linear-gradient(90deg, var(--yellow) 0 30px, transparent 30px) 10% 45% /
+      120px 10px no-repeat,
+    linear-gradient(90deg, var(--cyan) 0 24px, transparent 24px) 55% 64% / 100px
+      10px no-repeat;
+  filter: drop-shadow(0 0 6px rgba(174, 245, 34, 0.5));
 }
 
 .cover-glot {
@@ -2073,6 +2107,9 @@ a {
 .feature-card.green {
   color: var(--green);
 }
+.feature-card.lime {
+  color: var(--lime);
+}
 .feature-card:hover {
   transform: translateY(-6px);
   border-color: currentColor;
@@ -2665,6 +2702,9 @@ a {
 }
 .highlight.green {
   color: var(--green);
+}
+.highlight.lime {
+  color: var(--lime);
 }
 .highlight:hover {
   transform: translateY(-3px);

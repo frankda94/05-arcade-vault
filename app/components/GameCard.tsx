@@ -48,7 +48,13 @@ export default function GameCard({ game }: { game: Game }) {
           <button
             className={
               "btn " +
-              (game.color === "magenta" ? "magenta" : game.color === "yellow" ? "yellow" : "")
+              (game.color === "magenta"
+                ? "magenta"
+                : game.color === "yellow"
+                  ? "yellow"
+                  : game.color === "lime"
+                    ? "lime"
+                    : "")
             }
             onClick={(e) => {
               e.stopPropagation();
