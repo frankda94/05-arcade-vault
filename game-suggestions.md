@@ -8,7 +8,7 @@ Estados: Sugerido · Descartado · Implementado.
 | 2026-06-12 | SNAKE           | ARCADE  | magenta | Implementado | Spec 08                                                                         |
 | —          | ASTEROIDES      | SHOOTER | cyan    | Implementado | Spec 05/06                                                                      |
 | —          | TETRIS          | PUZZLE  | yellow  | Implementado | Catálogo Supabase                                                               |
-| 2026-06-17 | 2048 NEÓN       | PUZZLE  | magenta | Sugerido     | Fusión por deslizamiento; riesgo mínimo                                         |
+| 2026-06-23 | 2048 NEÓN       | PUZZLE  | magenta | Sugerido     | agent-jam / specs en specs/agent-jam/2048-neon                                  |
 | 2026-06-17 | CONEXIÓN        | PUZZLE  | cyan    | Sugerido     | agent-jam / specs en specs/agent-jam/conexion (unir nodos por color sin cruzar) |
 | 2026-06-17 | GRAVITÓN        | PUZZLE  | green   | Sugerido     | Puzzle de gravedad rotacional, matches 4+                                       |
 | 2026-06-17 | REBOTE          | ARCADE  | cyan    | Sugerido     | Breakout de neón con power-ups                                                  |
