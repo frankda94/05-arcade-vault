@@ -76,6 +76,19 @@ export default function GamePlayer({ game }: { game: Game }) {
   const [over, setOver] = useState(false);
   const [name, setName] = useState("INVITADO");
   const [saved, setSaved] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => {
+      if (!data.user) return;
+      setUserId(data.user.id);
+      const displayName = data.user.user_metadata?.display_name as
+        | string
+        | undefined;
+      setName((displayName ?? data.user.email!).toUpperCase().slice(0, 10));
+    });
+  }, []);
 
   const [astScore, setAstScore] = useState(0);
   const [astLives, setAstLives] = useState(3);
@@ -131,13 +144,25 @@ export default function GamePlayer({ game }: { game: Game }) {
   };
   const saveScore = async () => {
     if (isAsteroides) {
-      await saveGameScore(createClient(), "asteroides", name, displayScore);
+      await saveGameScore(
+        createClient(),
+        "asteroides",
+        name,
+        displayScore,
+        userId,
+      );
     } else if (isTetris) {
-      await saveGameScore(createClient(), "tetris", name, displayScore);
+      await saveGameScore(createClient(), "tetris", name, displayScore, userId);
     } else if (isSnake) {
-      await saveGameScore(createClient(), "snake", name, displayScore);
+      await saveGameScore(createClient(), "snake", name, displayScore, userId);
     } else if (isFrogger) {
-      await saveGameScore(createClient(), "frogger", name, displayScore);
+      await saveGameScore(
+        createClient(),
+        "frogger",
+        name,
+        displayScore,
+        userId,
+      );
     }
     setSaved(true);
   };
@@ -326,6 +351,7 @@ export default function GamePlayer({ game }: { game: Game }) {
                     setName(e.target.value.toUpperCase().slice(0, 10))
                   }
                   placeholder="TUS INICIALES"
+                  disabled={userId !== null}
                 />
                 <button className="btn yellow" onClick={saveScore}>
                   GUARDAR PUNTUACIÓN

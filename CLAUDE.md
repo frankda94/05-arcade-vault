@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Arcade Vault — an online gaming platform where users play and compete for high scores. Uses Spec Driven Design: features are designed via `/spec` before implementation with `/spec-impl`. Specs live in `specs/` (numbered, with status, dependencies, and date); see `specs/01-pantallas-visuales.md` through `specs/08-snake.md`.
+Arcade Vault — an online gaming platform where users play and compete for high scores. Uses Spec Driven Design: features are designed via `/spec` before implementation with `/spec-impl`. Specs live in `specs/` (numbered, with status, dependencies, and date); see `specs/01-pantallas-visuales.md` through `specs/09-controles-tactiles.md`, plus the autonomous game-jam specs under `specs/agent-jam/` (written by the `game-jam` agent).
 
 UI copy and spec language are in **Spanish**. No test runner is configured yet.
 
@@ -30,9 +30,9 @@ UI copy and spec language are in **Spanish**. No test runner is configured yet.
 
 ### Games
 
-The live catalog (Supabase `games` table) currently holds three games, each with a real canvas/JS engine wired into `GamePlayer` (selected by `game.id`): See [`JUEGOS.md`](JUEGOS.md) for the catalog table.
+The live catalog (Supabase `games` table) currently holds four games, each with a real canvas/JS engine wired into `GamePlayer` (selected by `game.id`): Asteroides, Tetris, Snake, Frogger. See [`JUEGOS.md`](JUEGOS.md) for the catalog table.
 
-Each engine takes `paused`/`resetSignal`/`endSignal` props and emits score/level callbacks. Other entries in the mock `GAMES` array are placeholder cards (animated arena, auto-incrementing score). On game over, players can save their score to the Supabase leaderboard.
+Each engine takes `paused`/`resetSignal`/`endSignal` props and emits score/level callbacks. Other entries in the mock `GAMES` array are placeholder cards (animated arena, auto-incrementing score). On game over, players can save their score to the Supabase leaderboard. Touch devices get on-screen controls (spec 09): `GamePlayer` defines a `<JUEGO>_TOUCH` config per engine and renders `TouchControls` when `lib/useIsTouchDevice.ts` detects a touch pointer.
 
 ### Data layer
 
@@ -58,15 +58,22 @@ Each engine takes `paused`/`resetSignal`/`endSignal` props and emits score/level
 
 ## Agents
 
-- **game-planner** (`.claude/agents/game-planner.md`) — piensa y decide qué nuevo juego encaja con el catálogo. Analiza huecos (categoría/color/mecánica), originalidad y viabilidad, propone candidatos y mantiene memoria de sugerencias previas en `game-suggestions.md` (raíz). Solo propone y registra; luego usa `/spec` para diseñar el elegido.
+Cada agente está definido en `.claude/agents/<nombre>.md` (ahí vive su prompt completo y sus reglas). Resumen:
+
+- **game-planner** — decide qué juego añadir; analiza huecos del catálogo y registra sugerencias en `game-suggestions.md`. Solo propone; no escribe specs ni código.
+- **game-jam** — dado un tema, diseña un juego de forma autónoma y escribe ≥2 specs (motor + leaderboard) en `specs/agent-jam/<game-id>/`. Escribe specs, nunca código.
+- **mobile-porter** — cablea controles táctiles (spec 09) de un juego concreto añadiendo su `<JUEGO>_TOUCH` en `GamePlayer.tsx`. Un juego por invocación.
+- **skin-designer** — aplica los skins canónicos (classic/retro/neon) a un juego concreto siguiendo el patrón de `TetrisGame`; registra progreso en `references/game-with-themes.md`.
 
 ## Architecture
 
 - `app/layout.tsx` — root layout with Geist fonts, sets `<html>`/`<body>` with Tailwind base classes; renders `Nav`.
 - `app/globals.css` — global styles + the neon/CRT arcade theme (Tailwind CSS v4 via PostCSS).
-- `app/components/` — `Nav`, `GameCard`, `GamePlayer`, and `games/` (`Asteroides`, `Tetris`, `Snake`).
+- `app/components/` — `Nav`, `GameCard`, `GamePlayer`, and `games/` (`Asteroides`, `Tetris`, `Snake`, `Frogger`, `TouchControls`).
 - `@/*` path alias maps to the project root (configured in `tsconfig.json`).
 - Tailwind CSS v4 is used — configured via `@tailwindcss/postcss`, not `tailwind.config.js`.
+- `references/` — `started-games/` holds reference engines used as a starting point for new games; `game-with-themes.md` tracks skin (classic/retro/neon) progress per game, maintained by the `skin-designer` agent.
+- `game-suggestions.md` (root) — memory of past game suggestions, maintained by the `game-planner` agent.
 
 ## Env vars
 

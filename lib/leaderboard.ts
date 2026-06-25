@@ -47,10 +47,16 @@ export async function saveGameScore(
   gameId: string,
   playerName: string,
   score: number,
+  userId: string | null,
 ): Promise<void> {
   const { error } = await supabase
     .from("scores")
-    .insert({ game_id: gameId, player_name: playerName, score });
+    .insert({
+      game_id: gameId,
+      player_name: playerName,
+      score,
+      user_id: userId,
+    });
 
   if (error) {
     console.error(error);
