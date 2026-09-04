@@ -1,6 +1,6 @@
 # 10 — Autenticación: registro, login y sesión
 
-**Estado:** aprobado
+**Estado:** Implementado
 **Dependencias:** [01-pantallas-visuales](01-pantallas-visuales.md) (UI de `/login` y `Nav` a reemplazar)
 **Fecha:** 2026-06-24
 

@@ -1,6 +1,6 @@
 # 05 — Asteroides: juego jugable con canvas
 
-**Estado:** Aprobado
+**Estado:** Implementado
 **Dependencias:** [01-pantallas-visuales](01-pantallas-visuales.md) (Reproductor `/juego/[id]/jugar`, HUD, modal de fin de juego)
 **Fecha:** 2026-06-11
 

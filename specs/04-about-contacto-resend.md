@@ -1,6 +1,6 @@
 # 04 — Página About y formulario de contacto con Resend
 
-**Estado:** Aprobado
+**Estado:** Implementado
 **Dependencias:** [01-pantallas-visuales](01-pantallas-visuales.md) (Nav, layout, globals.css ya portados)
 **Fecha:** 2026-06-10
 

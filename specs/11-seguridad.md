@@ -1,6 +1,6 @@
 # 11 — Endurecimiento de seguridad
 
-**Estado:** Aprobado
+**Estado:** Implementado
 **Dependencias:** [10-autenticacion](10-autenticacion.md) (políticas RLS de `scores` con `user_id`; Supabase Auth activo)
 **Fecha:** 2026-06-25
 

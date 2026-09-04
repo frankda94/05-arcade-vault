@@ -1,6 +1,6 @@
 # 07 — Tetris: motor jugable con leaderboard real en Supabase
 
-**Estado:** Aprobado
+**Estado:** Implementado
 **Dependencias:** [01-pantallas-visuales](01-pantallas-visuales.md) (Reproductor `/juego/[id]/jugar`, HUD, modal de fin de juego), [05-asteroides](05-asteroides.md) (patrón de port de motor + integración en GamePlayer), [06-leaderboard-asteroides-supabase](06-leaderboard-asteroides-supabase.md) (tablas `games`/`scores` ya existentes en Supabase, `lib/leaderboard.ts` a generalizar)
 **Fecha:** 2026-06-12
 

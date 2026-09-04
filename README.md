@@ -82,7 +82,7 @@ lib/            data.ts (tipos + mocks), games.ts, leaderboard.ts, useIsTouchDev
 utils/supabase/ factories de cliente SSR (client, server, middleware)
 proxy.ts        refresca la sesión SSR en cada request (Next 16: reemplaza middleware.ts)
 specs/          specs numerados + agent-jam/ (specs autónomos del agente game-jam)
-references/     motores de referencia, skins por juego y checklist de seguridad
+references/     material de partida (no versionado: esta en .gitignore)
 ```
 
 ## Cómo se construyó esto
@@ -152,8 +152,30 @@ en una sola pasada y sin diálogo:
 El punto no es que la IA escribiera el código. Es que **el diseño quedó escrito,
 revisable y discutible antes de existir una sola línea**.
 
-Los specs viven en [`specs/`](specs/), numerados y con estado, dependencias y fecha.
-La UI y los specs están en español.
+### Los specs
+
+Cada uno lleva estado, dependencias y fecha. La UI y los specs están en español.
+
+| Spec | Qué resolvió | Estado |
+| ---- | ------------ | ------ |
+| [01 · Pantallas visuales](specs/01-pantallas-visuales.md) | Portar las 5 pantallas de la plantilla a rutas reales de Next.js | Implementado |
+| [04 · About y contacto](specs/04-about-contacto-resend.md) | Página `/about` y formulario de contacto por email con Resend | Implementado |
+| [05 · Asteroides](specs/05-asteroides.md) | Primer motor jugable en canvas dentro de un componente React | Implementado |
+| [06 · Leaderboard real](specs/06-leaderboard-asteroides-supabase.md) | Tablas `games` y `scores` en Supabase; fin de las puntuaciones falsas | Implementado |
+| [07 · Tetris](specs/07-engranajes.md) | Segundo motor + el patrón de props que comparten todos los juegos | Implementado |
+| [08 · Snake](specs/08-snake.md) | Tercer motor y el catálogo de juegos movido a Supabase | Implementado |
+| [09 · Controles táctiles](specs/09-controles-tactiles.md) | D-pad en pantalla para jugar desde el móvil | Implementado |
+| [10 · Autenticación](specs/10-autenticacion.md) | Supabase Auth real: registro, login, OAuth y sesión SSR | Implementado |
+| [11 · Seguridad](specs/11-seguridad.md) | RLS, restricciones de contraseña y security headers HTTP | Implementado |
+
+Escritos por el agente `game-jam`, no por una persona:
+
+| Spec | Qué es | Estado |
+| ---- | ------ | ------ |
+| [Frogger](specs/agent-jam/frogger/frogger.md) | Motor completo diseñado desde un tema, sin diálogo | Implementado |
+| [Conexión](specs/agent-jam/conexion/) | Puzzle de conexión, motor + leaderboard | Borrador, sin implementar |
+
+> No existen los specs 02 y 03: la numeración saltó y nunca se escribieron.
 
 ## Seguridad
 
