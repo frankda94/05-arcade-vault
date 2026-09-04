@@ -726,7 +726,7 @@ a {
   content: "";
   position: absolute;
   inset: 0;
-  background-image:
+  background:
     radial-gradient(circle at 70% 50%, var(--magenta) 0 6px, transparent 7px),
     linear-gradient(90deg, var(--green) 0 40px, transparent 40px) 20% 50% /
       200px 12px no-repeat,
@@ -752,7 +752,7 @@ a {
   content: "";
   position: absolute;
   inset: 0;
-  background-image:
+  background:
     radial-gradient(circle at 50% 12%, var(--lime) 0 9px, transparent 10px),
     linear-gradient(90deg, var(--yellow) 0 30px, transparent 30px) 10% 45% /
       120px 10px no-repeat,
@@ -944,7 +944,7 @@ a {
   content: "";
   position: absolute;
   inset: 0;
-  background-image:
+  background:
     repeating-linear-gradient(
       0deg,
       rgba(255, 0, 110, 0.15) 0 24px,

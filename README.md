@@ -2,6 +2,11 @@
 
 Plataforma web para jugar arcade online y competir por la mayor puntuación.
 
+![Portada de Arcade Vault](docs/images/home.png)
+
+> Construido con **Spec Driven Design**: ninguna feature se implementa sin un spec
+> aprobado antes. Ver [Cómo se construyó esto](#cómo-se-construyó-esto).
+
 ## Stack
 
 - **Next.js 16.2** (App Router, Turbopack) + **React 19.2** + **TypeScript 5**
@@ -46,9 +51,28 @@ CONTACT_EMAIL_TO=
 
 ## Juegos
 
-Cuatro motores canvas/JS reales: **Asteroides**, **Tetris**, **Snake** y **Frogger**.
+Cuatro motores canvas/JS escritos desde cero, sin librería de juegos.
+
+| Asteroides | Tetris |
+| ---------- | ------ |
+| ![Asteroides](docs/images/juego-asteroides.png) | ![Tetris](docs/images/juego-tetris.png) |
+
+| Snake | Frogger |
+| ----- | ------- |
+| ![Snake](docs/images/juego-snake.png) | ![Frogger](docs/images/juego-frogger.png) |
+
 El catálogo vive en la tabla `games` de Supabase — ver [`JUEGOS.md`](JUEGOS.md).
 En dispositivos táctiles se renderizan controles en pantalla (`TouchControls`).
+
+Al terminar una partida se puede guardar la puntuación en el leaderboard real:
+
+![Guardar puntuación](docs/images/guardar-puntuacion.png)
+
+### Biblioteca y Salón de la Fama
+
+![Biblioteca](docs/images/biblioteca.png)
+
+![Salón de la Fama](docs/images/salon-fama.png)
 
 ## Estructura
 
@@ -61,23 +85,75 @@ specs/          specs numerados + agent-jam/ (specs autónomos del agente game-j
 references/     motores de referencia, skins por juego y checklist de seguridad
 ```
 
-## Spec Driven Design
+## Cómo se construyó esto
 
-Las features se diseñan con `/spec` antes de implementarse con `/spec-impl`.
-Los specs viven en `specs/` numerados y con estado, dependencias y fecha
-(`01-pantallas-visuales` … `11-seguridad`). La UI y los specs están en español.
+Este repo es tanto una plataforma de juegos como una demostración de un método de
+trabajo: **Spec Driven Design con agentes de IA**. Nada se implementa sin un spec
+aprobado antes.
 
-### Agentes (`.claude/agents/`)
+### El ciclo
 
-| Agente          | Qué hace                                                                                                                                                               | Escribe en                                                           |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| `game-planner`  | Estratega de producto: analiza huecos del catálogo y propone/decide el próximo juego con justificación (categoría, color, viabilidad). No escribe specs ni código.     | `game-suggestions.md`                                                |
-| `game-jam`      | Dado un **tema**, diseña un juego de forma autónoma y entrega ≥2 specs completos (motor jugable + leaderboard real) listos para `/spec-impl`. Nunca escribe código.    | `specs/agent-jam/<game-id>/`                                         |
-| `mobile-porter` | Cablea los controles táctiles (spec 09) de **un** juego añadiendo su config `<JUEGO>_TOUCH`. No toca el motor del juego, `TouchControls.tsx` ni `useIsTouchDevice.ts`. | `app/components/GamePlayer.tsx`                                      |
-| `skin-designer` | Aplica los 3 skins canónicos (`classic`, `retro`, `neon`) a **un** juego siguiendo el patrón de `TetrisGame`. Exige juego objetivo explícito.                          | `app/components/games/<Juego>.tsx`, `references/game-with-themes.md` |
+```
+idea → /spec → revisión humana → specs/NN-nombre.md → /spec-impl → rama + PR → merge
+```
 
-`mobile-porter` y `skin-designer` trabajan **un juego por invocación** y no auditan ni
-modifican los demás.
+1. **`/spec`** abre una fase deliberadamente lenta de definición: pregunta hasta que
+   el alcance está cerrado y construye el documento sección por sección. No escribe
+   código. La premisa es que *un spec vago se paga después en código improvisado*.
+2. **Revisión humana.** El spec se aprueba (`Estado: Aprobado`) antes de tocar nada.
+   Aquí es donde se corrige el rumbo barato.
+3. **`/spec-impl`** ejecuta el spec ya cerrado. La fase rápida: el contrato ya existe,
+   el agente no improvisa alcance.
+4. **Una rama y un PR por spec.** El historial de git es la trazabilidad: cada feature
+   se puede leer desde su spec hasta su merge.
+
+### Las piezas (`.claude/`)
+
+| Pieza                          | Rol                                                              |
+| ------------------------------ | ---------------------------------------------------------------- |
+| `skills/spec` + `spec-game`    | Diseñan el spec (genérico / específico de un juego). No codifican. |
+| `skills/spec-impl` + `-game`   | Implementan un spec ya aprobado.                                  |
+| `agents/`                      | Cuatro agentes especializados (tabla abajo).                      |
+| `hooks/format-file.mjs`        | Hook `PostToolUse`: pasa Prettier + ESLint `--fix` a cada archivo que el agente escribe. |
+| `CLAUDE.md` / `AGENTS.md`      | Memoria del proyecto: convenciones, stack, rutas y las trampas de Next.js 16 que un modelo no tiene en su entrenamiento. |
+
+`AGENTS.md` existe por un motivo concreto: Next.js 16 trae cambios que rompen respecto
+a lo que los modelos "saben" (Turbopack por defecto, `next lint` eliminado,
+`middleware.ts` → `proxy.ts`). El archivo obliga a leer `node_modules/next/dist/docs/`
+antes de escribir código en vez de confiar en la memoria del modelo.
+
+### Los agentes (`.claude/agents/`)
+
+| Agente           | Qué hace                                                                                                                              | Escribe en                                   |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| `game-planner`   | Estratega de producto: analiza huecos del catálogo y propone/decide el próximo juego con justificación (categoría, color, viabilidad). No escribe specs ni código. | `game-suggestions.md`                        |
+| `game-jam`       | Dado un **tema**, diseña un juego de forma autónoma y entrega ≥2 specs completos (motor jugable + leaderboard real) listos para `/spec-impl`. Nunca escribe código. | `specs/agent-jam/<game-id>/`                 |
+| `mobile-porter`  | Cablea los controles táctiles (spec 09) de **un** juego añadiendo su config `<JUEGO>_TOUCH`. No toca el motor del juego, `TouchControls.tsx` ni `useIsTouchDevice.ts`. | `app/components/GamePlayer.tsx`              |
+| `skin-designer`  | Aplica los 3 skins canónicos (`classic`, `retro`, `neon`) a **un** juego siguiendo el patrón de `TetrisGame`. Exige juego objetivo explícito.  | `app/components/games/<Juego>.tsx`           |
+
+Cada agente tiene un alcance recortado a propósito: `mobile-porter` y `skin-designer`
+trabajan **un juego por invocación** y tienen prohibido tocar archivos fuera de su
+competencia. Es la diferencia entre un agente que se puede revisar y uno que hay que
+deshacer.
+
+### Un caso: Frogger, diseñado por un agente
+
+Frogger no lo diseñó una persona. Se le dio un tema al agente `game-jam` y este,
+en una sola pasada y sin diálogo:
+
+1. Leyó el catálogo existente para no repetir categoría ni mecánica.
+2. Decidió el juego y escribió el spec completo —
+   [`specs/agent-jam/frogger/frogger.md`](specs/agent-jam/frogger/frogger.md):
+   rejilla de 16×14, zonas de carretera y río, tortugas que se sumergen, sistema de
+   vidas, tabla de puntuación y el contrato de props con `GamePlayer`.
+3. Se revisó y aprobó el spec.
+4. `/spec-impl` lo construyó en la rama `spec-agent-jam-frogger` → [PR #14](https://github.com/frankda94/05-arcade-vault/pull/14).
+
+El punto no es que la IA escribiera el código. Es que **el diseño quedó escrito,
+revisable y discutible antes de existir una sola línea**.
+
+Los specs viven en [`specs/`](specs/), numerados y con estado, dependencias y fecha.
+La UI y los specs están en español.
 
 ## Seguridad
 
