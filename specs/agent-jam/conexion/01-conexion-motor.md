@@ -1,7 +1,7 @@
 # 01 — CONEXIÓN: motor jugable + entrada de catálogo + integración en GamePlayer
 
 **Estado:** Borrador
-**Dependencias:** [01-pantallas-visuales](../../01-pantallas-visuales.md) (Reproductor `/juego/[id]/jugar`, HUD, modal de fin de juego), [05-asteroides](../../05-asteroides.md) (patrón de port + integración en GamePlayer), [08-snake](../../08-snake.md) (catálogo en tabla `games` de Supabase, `.cover-<id>`, branch `is<Nombre>` en GamePlayer)
+**Dependencias:** [01-pantallas-visuales](../../01-pantallas-visuales.md) (Reproductor `/juego/[id]/jugar`, HUD, modal de fin de juego), [03-asteroides](../../03-asteroides.md) (patrón de port + integración en GamePlayer), [06-snake](../../06-snake.md) (catálogo en tabla `games` de Supabase, `.cover-<id>`, branch `is<Nombre>` en GamePlayer)
 **Fecha:** 2026-06-17
 
 **Objetivo:** Añadir el juego `"conexion"` (puzzle tipo Flow Free: unir pares de nodos del mismo color trazando caminos que no se crucen hasta llenar la cuadrícula) como fila en la tabla `games`, con un motor jugable en canvas desde cero y su integración en `GamePlayer`.

@@ -1,7 +1,7 @@
-# 11 — Endurecimiento de seguridad
+# 09 — Endurecimiento de seguridad
 
 **Estado:** Implementado
-**Dependencias:** [10-autenticacion](10-autenticacion.md) (políticas RLS de `scores` con `user_id`; Supabase Auth activo)
+**Dependencias:** [08-autenticacion](08-autenticacion.md) (políticas RLS de `scores` con `user_id`; Supabase Auth activo)
 **Fecha:** 2026-06-25
 
 **Objetivo:** Aplicar el checklist de seguridad de `references/security/security-checklist.md`:

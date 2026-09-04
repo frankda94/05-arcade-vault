@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Arcade Vault — an online gaming platform where users play and compete for high scores. Uses Spec Driven Design: features are designed via `/spec` before implementation with `/spec-impl`. Specs live in `specs/` (numbered, with status, dependencies, and date); see `specs/01-pantallas-visuales.md` through `specs/09-controles-tactiles.md`, plus the autonomous game-jam specs under `specs/agent-jam/` (written by the `game-jam` agent).
+Arcade Vault — an online gaming platform where users play and compete for high scores. Uses Spec Driven Design: features are designed via `/spec` before implementation with `/spec-impl`. Specs live in `specs/` (numbered, with status, dependencies, and date); see `specs/01-pantallas-visuales.md` through `specs/09-seguridad.md`, plus the autonomous game-jam specs under `specs/agent-jam/` (written by the `game-jam` agent).
 
 UI copy and spec language are in **Spanish**. No test runner is configured yet.
 
@@ -32,7 +32,7 @@ UI copy and spec language are in **Spanish**. No test runner is configured yet.
 
 The live catalog (Supabase `games` table) currently holds four games, each with a real canvas/JS engine wired into `GamePlayer` (selected by `game.id`): Asteroides, Tetris, Snake, Frogger. See [`JUEGOS.md`](JUEGOS.md) for the catalog table.
 
-Each engine takes `paused`/`resetSignal`/`endSignal` props and emits score/level callbacks. Other entries in the mock `GAMES` array are placeholder cards (animated arena, auto-incrementing score). On game over, players can save their score to the Supabase leaderboard. Touch devices get on-screen controls (spec 09): `GamePlayer` defines a `<JUEGO>_TOUCH` config per engine and renders `TouchControls` when `lib/useIsTouchDevice.ts` detects a touch pointer.
+Each engine takes `paused`/`resetSignal`/`endSignal` props and emits score/level callbacks. Other entries in the mock `GAMES` array are placeholder cards (animated arena, auto-incrementing score). On game over, players can save their score to the Supabase leaderboard. Touch devices get on-screen controls (spec 07): `GamePlayer` defines a `<JUEGO>_TOUCH` config per engine and renders `TouchControls` when `lib/useIsTouchDevice.ts` detects a touch pointer.
 
 ### Data layer
 
@@ -62,7 +62,7 @@ Cada agente está definido en `.claude/agents/<nombre>.md` (ahí vive su prompt 
 
 - **game-planner** — decide qué juego añadir; analiza huecos del catálogo y registra sugerencias en `game-suggestions.md`. Solo propone; no escribe specs ni código.
 - **game-jam** — dado un tema, diseña un juego de forma autónoma y escribe ≥2 specs (motor + leaderboard) en `specs/agent-jam/<game-id>/`. Escribe specs, nunca código.
-- **mobile-porter** — cablea controles táctiles (spec 09) de un juego concreto añadiendo su `<JUEGO>_TOUCH` en `GamePlayer.tsx`. Un juego por invocación.
+- **mobile-porter** — cablea controles táctiles (spec 07) de un juego concreto añadiendo su `<JUEGO>_TOUCH` en `GamePlayer.tsx`. Un juego por invocación.
 - **skin-designer** — aplica los skins canónicos (classic/retro/neon) a un juego concreto siguiendo el patrón de `TetrisGame`; registra progreso en `references/game-with-themes.md`.
 
 ## Architecture

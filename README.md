@@ -112,7 +112,7 @@ antes de escribir código en vez de confiar en la memoria del modelo.
 | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
 | `game-planner`   | Estratega de producto: analiza huecos del catálogo y propone/decide el próximo juego con justificación (categoría, color, viabilidad). No escribe specs ni código. | `game-suggestions.md`                        |
 | `game-jam`       | Dado un **tema**, diseña un juego de forma autónoma y entrega ≥2 specs completos (motor jugable + leaderboard real) listos para `/spec-impl`. Nunca escribe código. | `specs/agent-jam/<game-id>/`                 |
-| `mobile-porter`  | Cablea los controles táctiles (spec 09) de **un** juego añadiendo su config `<JUEGO>_TOUCH`. No toca el motor del juego, `TouchControls.tsx` ni `useIsTouchDevice.ts`. | `app/components/GamePlayer.tsx`              |
+| `mobile-porter`  | Cablea los controles táctiles (spec 07) de **un** juego añadiendo su config `<JUEGO>_TOUCH`. No toca el motor del juego, `TouchControls.tsx` ni `useIsTouchDevice.ts`. | `app/components/GamePlayer.tsx`              |
 | `skin-designer`  | Aplica los 3 skins canónicos (`classic`, `retro`, `neon`) a **un** juego siguiendo el patrón de `TetrisGame`. Exige juego objetivo explícito.  | `app/components/games/<Juego>.tsx`           |
 
 Cada agente tiene un alcance recortado a propósito: `mobile-porter` y `skin-designer`
@@ -143,14 +143,14 @@ Cada uno lleva estado, dependencias y fecha. La UI y los specs están en españo
 | Spec | Qué resolvió | Estado |
 | ---- | ------------ | ------ |
 | [01 · Pantallas visuales](specs/01-pantallas-visuales.md) | Portar las 5 pantallas de la plantilla a rutas reales de Next.js | Implementado |
-| [04 · About y contacto](specs/04-about-contacto-resend.md) | Página `/about` y formulario de contacto por email con Resend | Implementado |
-| [05 · Asteroides](specs/05-asteroides.md) | Primer motor jugable en canvas dentro de un componente React | Implementado |
-| [06 · Leaderboard real](specs/06-leaderboard-asteroides-supabase.md) | Tablas `games` y `scores` en Supabase; fin de las puntuaciones falsas | Implementado |
-| [07 · Tetris](specs/07-engranajes.md) | Segundo motor + el patrón de props que comparten todos los juegos | Implementado |
-| [08 · Snake](specs/08-snake.md) | Tercer motor y el catálogo de juegos movido a Supabase | Implementado |
-| [09 · Controles táctiles](specs/09-controles-tactiles.md) | D-pad en pantalla para jugar desde el móvil | Implementado |
-| [10 · Autenticación](specs/10-autenticacion.md) | Supabase Auth real: registro, login, OAuth y sesión SSR | Implementado |
-| [11 · Seguridad](specs/11-seguridad.md) | RLS, restricciones de contraseña y security headers HTTP | Implementado |
+| [02 · About y contacto](specs/02-about-contacto-resend.md) | Página `/about` y formulario de contacto por email con Resend | Implementado |
+| [03 · Asteroides](specs/03-asteroides.md) | Primer motor jugable en canvas dentro de un componente React | Implementado |
+| [04 · Leaderboard real](specs/04-leaderboard-asteroides-supabase.md) | Tablas `games` y `scores` en Supabase; fin de las puntuaciones falsas | Implementado |
+| [05 · Tetris](specs/05-engranajes.md) | Segundo motor + el patrón de props que comparten todos los juegos | Implementado |
+| [06 · Snake](specs/06-snake.md) | Tercer motor y el catálogo de juegos movido a Supabase | Implementado |
+| [07 · Controles táctiles](specs/07-controles-tactiles.md) | D-pad en pantalla para jugar desde el móvil | Implementado |
+| [08 · Autenticación](specs/08-autenticacion.md) | Supabase Auth real: registro, login, OAuth y sesión SSR | Implementado |
+| [09 · Seguridad](specs/09-seguridad.md) | RLS, restricciones de contraseña y security headers HTTP | Implementado |
 
 Escritos por el agente `game-jam`, no por una persona:
 
@@ -159,10 +159,3 @@ Escritos por el agente `game-jam`, no por una persona:
 | [Frogger](specs/agent-jam/frogger/frogger.md) | Motor completo diseñado desde un tema, sin diálogo | Implementado |
 | [Conexión](specs/agent-jam/conexion/) | Puzzle de conexión, motor + leaderboard | Borrador, sin implementar |
 
-> No existen los specs 02 y 03: la numeración saltó y nunca se escribieron.
-
-## Seguridad
-
-Spec [`11-seguridad`](specs/11-seguridad.md) aplica RLS en `games`/`scores`, restricciones
-de contraseña en Supabase Auth y security headers en `next.config.ts`.
-**Pendiente:** no hay Content-Security-Policy (fuera de alcance del spec 11).

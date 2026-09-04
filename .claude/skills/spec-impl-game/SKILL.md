@@ -204,7 +204,7 @@ This phase only runs if Phase 4 closed successfully (all plan steps implemented 
 
 2. **Run `skin-designer` first.** Launch it (subagent_type `skin-designer`) with a self-contained prompt telling it to apply the three canonical skins (classic/retro/neon) to the resolved game id, per its own rules in `.claude/agents/skin-designer.md`. Wait for it to finish. Relay its final summary to the user (game, skins added with key palettes, files edited, updated row in `references/game-with-themes.md`).
 
-3. **Only after `skin-designer` has finished**, run `mobile-porter` (subagent_type `mobile-porter`) on the **same** game id, telling it to wire touch controls (spec 10) per `.claude/agents/mobile-porter.md`. Wait for it to finish. Relay its final summary (game ported, play-page file modified, applied `keyMap`).
+3. **Only after `skin-designer` has finished**, run `mobile-porter` (subagent_type `mobile-porter`) on the **same** game id, telling it to wire touch controls (spec 07) per `.claude/agents/mobile-porter.md`. Wait for it to finish. Relay its final summary (game ported, play-page file modified, applied `keyMap`).
 
    **Why this order is mandatory:** `mobile-porter` wires the `MobileGamepad` skin selector (`skin={skinKey}` / `onSkinChange={changeSkin}`) into the play-page. That selector only has something real to control once `skin-designer` has added the skin system (`SKINS`, `skinKey` prop, `skinRef`) to the game component. Running `mobile-porter` first would force it to fall back to the `skin="classic"` / `onSkinChange={() => {}}` placeholder, leaving a TODO that `skin-designer` would then make stale. Never run them in parallel or reverse this order.
 

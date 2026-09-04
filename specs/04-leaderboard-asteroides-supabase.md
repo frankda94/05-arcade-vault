@@ -1,7 +1,7 @@
-# 06 — Leaderboard real de Asteroides con tablas `games` y `scores` en Supabase
+# 04 — Leaderboard real de Asteroides con tablas `games` y `scores` en Supabase
 
 **Estado:** Implementado
-**Dependencias:** [05-asteroides](05-asteroides.md) (juego jugable y botón "GUARDAR PUNTUACIÓN" en `GamePlayer`), [01-pantallas-visuales](01-pantallas-visuales.md) (leaderboards en `/juego/[id]` y `/salon-fama`)
+**Dependencias:** [03-asteroides](03-asteroides.md) (juego jugable y botón "GUARDAR PUNTUACIÓN" en `GamePlayer`), [01-pantallas-visuales](01-pantallas-visuales.md) (leaderboards en `/juego/[id]` y `/salon-fama`)
 **Fecha:** 2026-06-11
 
 **Objetivo:** Crear en Supabase una tabla de juegos (`games`, con una fila inicial para `"asteroides"`) y una tabla de puntuaciones (`scores`) para persistir partidas reales, conectando el botón "GUARDAR PUNTUACIÓN" del Reproductor de Asteroides a una inserción real y mostrando ese leaderboard real en `/juego/asteroides` y en la pestaña "ASTEROIDES" de `/salon-fama`.

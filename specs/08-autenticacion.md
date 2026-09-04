@@ -1,4 +1,4 @@
-# 10 — Autenticación: registro, login y sesión
+# 08 — Autenticación: registro, login y sesión
 
 **Estado:** Implementado
 **Dependencias:** [01-pantallas-visuales](01-pantallas-visuales.md) (UI de `/login` y `Nav` a reemplazar)

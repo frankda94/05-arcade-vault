@@ -46,9 +46,9 @@ Arrancas en frío. Antes de diseñar nada, lee:
    `isAsteroides`/`isTetris`/`isSnake` de `app/components/GamePlayer.tsx`: la forma de
    referencia del componente-motor (props `paused`/`resetSignal`/`endSignal` + callbacks +
    `onGameOver`) y de su integración (render condicional en `.game-arena`, HUD, botones).
-5. `specs/05-asteroides.md` + `specs/06-leaderboard-asteroides-supabase.md`: el **precedente
+5. `specs/03-asteroides.md` + `specs/04-leaderboard-asteroides-supabase.md`: el **precedente
    canónico de la división en dos specs** (motor primero, leaderboard después).
-6. `specs/07-engranajes.md` + `specs/08-snake.md`: referencia de **forma, granularidad y
+6. `specs/05-engranajes.md` + `specs/06-snake.md`: referencia de **forma, granularidad y
    calidad**, y prueba de que catálogo y páginas (`/biblioteca`, `/juego/[id]`,
    `/salon-fama`) ya son data-driven contra la tabla `games`.
 7. `.claude/skills/spec/template.md`: estructura de secciones de un spec.
@@ -87,7 +87,7 @@ specs/agent-jam/<id>`.
 Crea `specs/agent-jam/[game-id]/` y escribe, con **numeración local** a la carpeta:
 
 - **`01-<slug>-motor.md`** — motor jugable + entrada de catálogo + integración en
-  `GamePlayer` (equivale a `05-asteroides`, adaptado al catálogo-en-Supabase actual).
+  `GamePlayer` (equivale a `03-asteroides`, adaptado al catálogo-en-Supabase actual).
   Cubre: fila en la tabla `games` (para que el juego aparezca en `/biblioteca`,
   `/juego/[id]`, `/jugar`), `.cover-<id>` en `globals.css`, el componente
   `app/components/games/<Nombre>.tsx` con su interfaz `*Props`
@@ -102,13 +102,13 @@ Crea `specs/agent-jam/[game-id]/` y escribe, con **numeración local** a la carp
   header por qué existe.
 
 **Cada spec sigue la estructura de `template.md`**, con el header en el formato real de
-`specs/07-*`/`08-*` (líneas en negrita, no blockquote):
+`specs/05-*`/`06-*` (líneas en negrita, no blockquote):
 
 ```markdown
 # 01 — <Título>: <resumen corto>
 
 **Estado:** Borrador
-**Dependencias:** [01-pantallas-visuales](../../01-pantallas-visuales.md) (Reproductor/HUD/modal), [05-asteroides](../../05-asteroides.md) (patrón de port + GamePlayer), [08-snake](../../08-snake.md) (catálogo en tabla `games`)
+**Dependencias:** [01-pantallas-visuales](../../01-pantallas-visuales.md) (Reproductor/HUD/modal), [03-asteroides](../../03-asteroides.md) (patrón de port + GamePlayer), [06-snake](../../06-snake.md) (catálogo en tabla `games`)
 **Fecha:** <fecha actual>
 
 **Objetivo:** <una sola frase>
@@ -125,7 +125,7 @@ identificados** (Strict Mode doble-montaje, re-render por callbacks de alta frec
 canvas responsive con grilla, y regresión de leaderboards compartidos cuando aplique).
 
 `02-…` declara en `Dependencias` el spec `01-…` de la misma carpeta, además de
-`06-leaderboard-asteroides-supabase` y `08-snake`.
+`04-leaderboard-asteroides-supabase` y `06-snake`.
 
 ## Fase 4 — Cierre / handoff
 
