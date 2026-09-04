@@ -1,10 +1,10 @@
-# 08 — Snake: motor jugable + catálogo de games en Supabase
+# 06 — Snake: motor jugable + catálogo de games en Supabase
 
 **Estado:** Implementado
 **Dependencias:** [01-pantallas-visuales](01-pantallas-visuales.md) (Reproductor `/juego/[id]/jugar`, HUD, modal de fin de juego),
-[05-asteroides](05-asteroides.md) (patrón de port de motor + integración en GamePlayer),
-[06-leaderboard-asteroides-supabase](06-leaderboard-asteroides-supabase.md) y
-[07-engranajes](07-engranajes.md) (tablas `games`/`scores`, `lib/leaderboard.ts` generalizado)
+[03-asteroides](03-asteroides.md) (patrón de port de motor + integración en GamePlayer),
+[04-leaderboard-asteroides-supabase](04-leaderboard-asteroides-supabase.md) y
+[05-engranajes](05-engranajes.md) (tablas `games`/`scores`, `lib/leaderboard.ts` generalizado)
 **Fecha:** 2026-06-12
 
 **Objetivo:** Ampliar el esquema de `games` en Supabase con las columnas de catálogo (`short`/`long`/`cat`/`cover`/`color`/`best`/`plays`), completar las filas existentes (`asteroides`, `tetris`) con esos datos, agregar `"snake"` con un motor jugable desde cero (grid + sprites de fruta de `snake-assets`) y leaderboard real (vacío), y hacer que `/biblioteca`, `/juego/[id]`, `/juego/[id]/jugar`, `GamePlayer` y `/salon-fama` lean el catálogo desde `games` en vez de `GAMES`/`lib/data.ts`.

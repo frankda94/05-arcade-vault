@@ -1,7 +1,7 @@
 # 02 — CONEXIÓN: leaderboard real en Supabase
 
 **Estado:** Borrador
-**Dependencias:** [01-conexion-motor](01-conexion-motor.md) (juego jugable, fila `"conexion"` en `games`, botón "GUARDAR PUNTUACIÓN" en GamePlayer), [06-leaderboard-asteroides-supabase](../../06-leaderboard-asteroides-supabase.md) (tabla `scores`, helpers genéricos `getGameScores`/`saveGameScore`), [08-snake](../../08-snake.md) (catálogo en tabla `games`, camino genérico de leaderboard ya data-driven)
+**Dependencias:** [01-conexion-motor](01-conexion-motor.md) (juego jugable, fila `"conexion"` en `games`, botón "GUARDAR PUNTUACIÓN" en GamePlayer), [04-leaderboard-asteroides-supabase](../../04-leaderboard-asteroides-supabase.md) (tabla `scores`, helpers genéricos `getGameScores`/`saveGameScore`), [06-snake](../../06-snake.md) (catálogo en tabla `games`, camino genérico de leaderboard ya data-driven)
 **Fecha:** 2026-06-17
 
 **Objetivo:** Dar a `"conexion"` un leaderboard real persistido en la tabla `scores` de Supabase, sembrándolo con ~10 puntuaciones de ejemplo y conectando el botón "GUARDAR PUNTUACIÓN" del Reproductor a `saveGameScore(supabase, "conexion", name, score)`.

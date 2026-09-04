@@ -11,8 +11,8 @@ This is a specialized variant of `/spec` for one recurring kind of feature in th
 
 The canonical precedent is the pair of specs that did this for Asteroides:
 
-- `specs/05-asteroides.md` — ports the engine to a React/canvas component and wires it into `GamePlayer`.
-- `specs/06-leaderboard-asteroides-supabase.md` — adds the Supabase `games`/`scores` tables and real leaderboard.
+- `specs/03-asteroides.md` — ports the engine to a React/canvas component and wires it into `GamePlayer`.
+- `specs/04-leaderboard-asteroides-supabase.md` — adds the Supabase `games`/`scores` tables and real leaderboard.
 
 A spec produced by this skill should cover **both** halves (engine port + real leaderboard) for one game, generalized so it does not assume "asteroides" — read both files in full before starting, they are your shape reference for sections, plan granularity and acceptance-criteria style.
 
@@ -23,7 +23,7 @@ Your replies must be in the same language as the initial prompt (this project's 
 Before asking anything, gather state:
 
 1. Read `CLAUDE.md` / `AGENTS.md`.
-2. List `specs/` and read `specs/05-asteroides.md` and `specs/06-leaderboard-asteroides-supabase.md` in full.
+2. List `specs/` and read `specs/03-asteroides.md` and `specs/04-leaderboard-asteroides-supabase.md` in full.
 3. List `references/started-games/*` — these are candidate source engines (currently `02-asteroids`, `03-tetris`, `04-arkanoid`). Cross-check against `lib/data.ts` `GAMES` (`cover`, `id`) to see which ones are already ported (asteroides ← `02-asteroids`). The user may also choose "from scratch" / a different reference, not necessarily from this folder.
 4. Read `lib/data.ts`: the `Game` interface, the full `GAMES` array (existing `id`s, `cover` classes, `cat`/`color` values already used, tone of `short`/`long`), `PLAYERS`, and `seededScores`.
 5. Read `lib/leaderboard.ts` and check its current state:
@@ -55,13 +55,13 @@ Stop when you can answer, for this game: which files appear/change, what the fir
 
 Use `template.md` from `.claude/skills/spec/` for section shape. Produce **one** spec covering both halves (engine port + real leaderboard), in this order, confirming each with the user before moving on:
 
-1. **Header** — one-sentence objective (e.g. "Port `<engine>` to a playable React/canvas component, add it to the catalog and give it a real Supabase leaderboard"). Dependencies should reference `01-pantallas-visuales` (Reproductor/HUD/modal) and, if `games`/`scores` already exist, the spec that created them (`06-leaderboard-asteroides-supabase`) instead of recreating the tables.
+1. **Header** — one-sentence objective (e.g. "Port `<engine>` to a playable React/canvas component, add it to the catalog and give it a real Supabase leaderboard"). Dependencies should reference `01-pantallas-visuales` (Reproductor/HUD/modal) and, if `games`/`scores` already exist, the spec that created them (`04-leaderboard-asteroides-supabase`) instead of recreating the tables.
 2. **Scope** — In/Out. Mirror the structure of 05+06's "Incluye"/"No incluye": catalog entry + cover CSS, engine component, `GamePlayer` integration (HUD wiring, pause/end/restart/exit), `games`/`scores` row + seed for this game, real leaderboard in `/juego/[id]` and `/salon-fama`, "GUARDAR PUNTUACIÓN" wired to `saveGameScore`. Explicitly exclude touch controls, audio, auth, other catalog entries, automated tests — unless the user asked for them.
 3. **Data model** — concrete, generalized:
    - New `GAMES` entry (full object literal).
    - New `.cover-<id>` CSS class (described, not full CSS).
    - `*Props` interface for the new engine component, following the Asteroides shape (`paused`, `resetSignal`, `endSignal`, `onScoreChange`, `onLivesChange`, `onLevelChange`, any extra `onXChange`, `onGameOver`).
-   - SQL for the new row(s): `insert into games (id, title) values (...)` + seed `insert into scores (...)`. Only include `create table`/RLS SQL if Phase 1 found those tables don't exist yet (they should already exist after spec 06).
+   - SQL for the new row(s): `insert into games (id, title) values (...)` + seed `insert into scores (...)`. Only include `create table`/RLS SQL if Phase 1 found those tables don't exist yet (they should already exist after spec 04).
    - If applicable, the new signatures for `lib/leaderboard.ts` (`getGameScores`/`saveGameScore`) and how `/juego/[id]` / `/salon-fama` will look up `games` by `id`.
 4. **Implementation plan** — numbered, each step leaves the system functional, mirroring 05+06's granularity:
    - Catalog entry + cover CSS (cosmetic only, system still works).

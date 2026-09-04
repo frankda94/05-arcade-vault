@@ -1,7 +1,7 @@
-# 07 — Tetris: motor jugable con leaderboard real en Supabase
+# 05 — Tetris: motor jugable con leaderboard real en Supabase
 
 **Estado:** Implementado
-**Dependencias:** [01-pantallas-visuales](01-pantallas-visuales.md) (Reproductor `/juego/[id]/jugar`, HUD, modal de fin de juego), [05-asteroides](05-asteroides.md) (patrón de port de motor + integración en GamePlayer), [06-leaderboard-asteroides-supabase](06-leaderboard-asteroides-supabase.md) (tablas `games`/`scores` ya existentes en Supabase, `lib/leaderboard.ts` a generalizar)
+**Dependencias:** [01-pantallas-visuales](01-pantallas-visuales.md) (Reproductor `/juego/[id]/jugar`, HUD, modal de fin de juego), [03-asteroides](03-asteroides.md) (patrón de port de motor + integración en GamePlayer), [04-leaderboard-asteroides-supabase](04-leaderboard-asteroides-supabase.md) (tablas `games`/`scores` ya existentes en Supabase, `lib/leaderboard.ts` a generalizar)
 **Fecha:** 2026-06-12
 
 **Objetivo:** Portar el motor de Tetris de `references/started-games/03-tetris/game.js` a un componente React/canvas jugable, agregarlo al catálogo como nueva entrada `"tetris"` (TETRIS) integrada en el Reproductor con HUD y leaderboard real en Supabase, generalizando de paso `lib/leaderboard.ts` y la lógica de `/juego/[id]` y `/salon-fama` para que cualquier juego con fila en `games` use leaderboard real sin más branches hardcodeados.

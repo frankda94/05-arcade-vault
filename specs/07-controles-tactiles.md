@@ -1,7 +1,7 @@
-# 09 — Controles táctiles para los motores jugables
+# 07 — Controles táctiles para los motores jugables
 
 **Estado:** Implementado
-**Dependencias:** [05-asteroides](05-asteroides.md), [07-engranajes](07-engranajes.md) (Tetris), [08-snake](08-snake.md) — los tres motores y `GamePlayer` ya existentes, sin cambios a su lógica interna
+**Dependencias:** [03-asteroides](03-asteroides.md), [05-engranajes](05-engranajes.md) (Tetris), [06-snake](06-snake.md) — los tres motores y `GamePlayer` ya existentes, sin cambios a su lógica interna
 **Fecha:** 2026-06-19
 
 **Objetivo:** Añadir una franja de controles táctiles (D-pad + botones de acción) debajo de `.crt-screen` en `GamePlayer`, visible solo en dispositivos con puntero táctil primario (`pointer: coarse`), que simula eventos de teclado para pilotar Asteroides, Tetris y Snake sin tocar la lógica interna de ninguno de los tres motores.
