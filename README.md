@@ -51,28 +51,12 @@ CONTACT_EMAIL_TO=
 
 ## Juegos
 
-Cuatro motores canvas/JS escritos desde cero, sin librería de juegos.
-
-| Asteroides | Tetris |
-| ---------- | ------ |
-| ![Asteroides](docs/images/juego-asteroides.png) | ![Tetris](docs/images/juego-tetris.png) |
-
-| Snake | Frogger |
-| ----- | ------- |
-| ![Snake](docs/images/juego-snake.png) | ![Frogger](docs/images/juego-frogger.png) |
+Cuatro motores canvas/JS escritos desde cero, sin librería de juegos:
+**Asteroides**, **Tetris**, **Snake** y **Frogger**.
 
 El catálogo vive en la tabla `games` de Supabase — ver [`JUEGOS.md`](JUEGOS.md).
+Al terminar una partida se puede guardar la puntuación en el leaderboard real.
 En dispositivos táctiles se renderizan controles en pantalla (`TouchControls`).
-
-Al terminar una partida se puede guardar la puntuación en el leaderboard real:
-
-![Guardar puntuación](docs/images/guardar-puntuacion.png)
-
-### Biblioteca y Salón de la Fama
-
-![Biblioteca](docs/images/biblioteca.png)
-
-![Salón de la Fama](docs/images/salon-fama.png)
 
 ## Estructura
 
