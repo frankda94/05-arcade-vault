@@ -49,3 +49,5 @@ next-env.d.ts
 
 #references
 references/
+# dev logs
+*.log

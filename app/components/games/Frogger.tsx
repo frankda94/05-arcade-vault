@@ -879,10 +879,13 @@ export default function Frogger({
   }, [endSignal]);
 
   const [activeSkin, setActiveSkin] = useState(skinKey ?? "classic");
-
-  useEffect(() => {
+  // Sincroniza con la prop en render, no en un efecto: evita el render en
+  // cascada y deja el boton de skin seguir siendo estado del usuario.
+  const [prevSkinKey, setPrevSkinKey] = useState(skinKey);
+  if (skinKey !== prevSkinKey) {
+    setPrevSkinKey(skinKey);
     setActiveSkin(skinKey ?? "classic");
-  }, [skinKey]);
+  }
 
   return (
     <div style={{ position: "relative", width: "100%", height: "100%" }}>

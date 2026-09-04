@@ -18,6 +18,12 @@ export async function POST(request: Request) {
     );
   }
 
+  // Modo demo: sin RESEND_API_KEY el formulario responde ok sin enviar nada.
+  // Permite publicar el demo sin exponer una bandeja real al spam.
+  if (!process.env.RESEND_API_KEY) {
+    return NextResponse.json({ ok: true, demo: true });
+  }
+
   try {
     const resend = new Resend(process.env.RESEND_API_KEY);
     await resend.emails.send({

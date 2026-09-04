@@ -115,6 +115,7 @@ export default function Snake({
     let moveInterval: number;
     let moveAccum: number;
     let gameOver: boolean;
+    let started: boolean; // la serpiente no se mueve hasta la primera flecha
 
     let lastScore = -1;
     let lastLength = -1;
@@ -160,6 +161,7 @@ export default function Snake({
       moveInterval = MOVE_INTERVAL_START;
       moveAccum = 0;
       gameOver = false;
+      started = false;
       spawnFood();
     }
 
@@ -317,6 +319,27 @@ export default function Snake({
         );
         ctx.globalAlpha = 1;
       }
+
+      // Aviso de arranque: sin el, la serpiente choca contra el muro en ~1s,
+      // antes de que nadie alcance a pulsar nada.
+      if (!started && !gameOver) {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
+        ctx.fillRect(offsetX, offsetY, block * COLS, block * ROWS);
+
+        const cx = offsetX + (block * COLS) / 2;
+        const cy = offsetY + (block * ROWS) / 2;
+
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "#f5ff00";
+        ctx.font = "bold 22px ui-monospace, SFMono-Regular, Menlo, monospace";
+        ctx.fillText("PULSA UNA FLECHA", cx, cy - 76);
+        ctx.fillStyle = "#8a8aa0";
+        ctx.font = "12px ui-monospace, SFMono-Regular, Menlo, monospace";
+        ctx.fillText("PARA EMPEZAR", cx, cy - 48);
+        ctx.textAlign = "start";
+        ctx.textBaseline = "alphabetic";
+      }
     };
 
     // ── Controles ───────────────────────────────────────────────────────────
@@ -324,6 +347,7 @@ export default function Snake({
       if (!CONTROL_KEYS.has(e.code)) return;
       e.preventDefault();
       if (pausedRef.current || gameOver) return;
+      started = true;
       pendingDir = DIRS[e.code];
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -354,7 +378,7 @@ export default function Snake({
     const loop = (ts: number) => {
       raf = requestAnimationFrame(loop);
 
-      if (!pausedRef.current && !gameOver) {
+      if (!pausedRef.current && !gameOver && started) {
         const dt = lastTime === null ? 0 : ts - lastTime;
         lastTime = ts;
         moveAccum += dt;

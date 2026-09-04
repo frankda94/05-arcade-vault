@@ -1,6 +1,6 @@
 # 01 — Pantallas visuales de Arcade Vault
 
-**Estado:** Aprobado
+**Estado:** Implementado
 **Dependencias:** Ninguna (primer spec del proyecto)
 **Fecha:** 2026-06-10
 
