@@ -78,4 +78,4 @@ Cada agente está definido en `.claude/agents/<nombre>.md` (ahí vive su prompt 
 ## Env vars
 
 - `RESEND_API_KEY`, `CONTACT_EMAIL_TO` — contact form email.
-- `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (or publishable key) — Supabase client.
+- `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` — Supabase client (`utils/supabase/{client,server,middleware}.ts`).
